@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="uz"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Navbatchilik 🏠🏢</title>
+<style>
+:root{--bg:#fff7e6;--card:#fff;--tx:#2b2d42;--mut:#7a7f9a;--p:#6c5ce7;--g:#00b894;--o:#ff9f1c;--r:#ff5e78;--b:#2dabf9}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1d1b2e;--card:#2a2842;--tx:#f3f1ff;--mut:#a9a6c9}}
+:root[data-theme=dark]{--bg:#1d1b2e;--card:#2a2842;--tx:#f3f1ff;--mut:#a9a6c9}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 "Nunito","Trebuchet MS",system-ui,sans-serif;padding:env(safe-area-inset-top,0px) 0 calc(84px + env(safe-area-inset-bottom,0px))}
+main{max-width:520px;margin:auto;padding:14px}
+h1,h2{margin:0 0 8px}h1{font-size:24px}h2{font-size:19px}
+.mut{color:var(--mut)}
+.card{background:var(--card);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 4px 0 rgba(0,0,0,.08)}
+.hero{background:linear-gradient(135deg,var(--p),var(--b));color:#fff}
+.now{outline:3px solid var(--o)}
+.err{background:rgba(255,94,120,.15);color:var(--tx)}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:14px;font:800 16px inherit;font-family:inherit;color:#fff;background:var(--g);box-shadow:0 5px 0 rgba(0,0,0,.2);cursor:pointer;margin-top:10px;text-align:center}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
+.btn.o{background:var(--o)}.btn.p{background:var(--p)}.btn.r{background:var(--r)}.btn.b{background:var(--b)}
+.tabs{display:flex;gap:6px;margin-bottom:12px}
+.tabs button{flex:1;border:0;padding:11px;border-radius:14px;font:800 15px inherit;font-family:inherit;background:rgba(127,127,127,.18);color:var(--tx)}
+.tabs button.on{background:var(--p);color:#fff}
+.lbl{font-weight:800;font-size:14px;margin:12px 0 4px;color:var(--mut)}
+.nm{display:inline-block;padding:8px 14px;border-radius:14px;font-weight:800;margin:3px 4px 3px 0}
+.nm.r{background:rgba(45,171,249,.18)}.nm.h{background:rgba(108,92,231,.18)}
+.pill{display:inline-block;background:rgba(255,255,255,.25);border-radius:20px;padding:3px 10px;font-size:13px;font-weight:800}
+.card .pill{background:rgba(255,159,28,.25)}.pill.ok{background:rgba(0,184,148,.22)!important}.pill.bad{background:rgba(255,94,120,.25)!important}
+.wr{display:flex;gap:10px;align-items:flex-start;margin-top:8px;font-size:15px}
+.rn{background:var(--p);color:#fff;border-radius:10px;min-width:28px;height:28px;display:grid;place-items:center;font-weight:800}
+.sr{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px dashed rgba(127,127,127,.3)}.sr:last-child{border:0}
+.sr b{width:34%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sr span{font-size:13px;width:74px;text-align:right}
+.bars{flex:1;display:flex;flex-direction:column;gap:4px}
+.bar{height:9px;background:rgba(127,127,127,.2);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;border-radius:9px}
+.bar.r i{background:var(--b)}.bar.h i{background:var(--p)}
+input,textarea{width:100%;padding:13px;border-radius:14px;border:2px solid rgba(127,127,127,.3);font:16px inherit;font-family:inherit;margin-top:8px;background:var(--card);color:var(--tx)}
+.two{display:grid;grid-template-columns:90px 1fr;gap:8px}
+.kr{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(127,127,127,.3)}.kr:last-child{border:0}
+.kr button{border:0;background:rgba(255,94,120,.18);color:var(--r);border-radius:10px;font-size:16px;padding:6px 12px}
+.sec{display:none}.sec.on{display:block;animation:pop .3s}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);display:flex;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));box-shadow:0 -3px 12px rgba(0,0,0,.12);z-index:5}
+nav button{background:none;border:0;font:700 11px inherit;font-family:inherit;color:var(--mut);display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 14px;border-radius:12px}
+nav button span{font-size:22px}nav button.on{color:var(--p);background:rgba(108,92,231,.12)}
+.toast{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);background:var(--p);color:#fff;padding:10px 18px;border-radius:20px;font-weight:800;z-index:11;display:none;max-width:90%;text-align:center}
+</style><script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script></head>
+<body><div class="toast" id="toast"></div>
+<main>
+<section class="sec on" id="today">
+ <div class="card hero"><span class="pill" id="mdPill"></span><h1 style="margin-top:8px" id="hHi"></h1><p style="margin:0" id="hDate"></p></div>
+ <div class="tabs"><button id="tb0" class="on" onclick="setTd(0)">Bugun</button><button id="tb1" onclick="setTd(1)">Ertaga</button></div>
+ <div id="tdBody"></div>
+ <button class="btn p" onclick="copyDay()">📋 Telegram uchun matnni nusxalash</button>
+</section>
+<section class="sec" id="week"><h2>📅 Haftalik jadval</h2><p class="mut" style="margin:0 0 10px">Keyingi 7 kun (faqat navbatchilik kunlari)</p><div id="wkBody"></div></section>
+<section class="sec" id="stats"><h2>📊 Statistika</h2><p class="mut" style="margin:0 0 10px">🏠 xona • 🏢 zal — necha marta navbatchi bo‘lgan</p><div id="stBody"></div></section>
+<section class="sec" id="admin"><h2>⚙️ Admin</h2><div id="adBody"></div></section>
+</main>
+<nav>
+ <button class="on" data-s="today" onclick="go('today')"><span>🏠</span>Bugun</button>
+ <button data-s="week" onclick="go('week')"><span>📅</span>Hafta</button>
+ <button data-s="stats" onclick="go('stats')"><span>📊</span>Statistika</button>
+ <button data-s="admin" onclick="go('admin')"><span>⚙️</span>Admin</button>
+</nav>
+
+<script>
+/* ⚙️ SOZLAMALAR: shu yerni o‘zingizga moslang */
+const CONFIG={
+  ADMIN_IDS:[8081723573],          // Telegram ID lar, masalan [111111,222222] (ID ni @userinfobot dan oling)
+  PIN:'1234',            // brauzerda admin ochish paroli: ALBATTA o‘zgartiring
+  TZ:'Asia/Tashkent',
+  PER:2,                 // xona navbatchisi: har xonadan nechta bola; zal: bir kunda faqat bitta xonadan shuncha bola
+  WORKDAYS:[1,2,3,4,5], // navbatchilik kunlari: 1=Dushanba … 5=Juma (0=Yakshanba, 6=Shanba)
+  AHEAD:30,              // necha kunlik jadval oldindan tayyorlansin
+  DATA_URL:'data.json',  // zaxira yo‘li: Firebase ishlamasa shu fayl o‘qiladi
+  COL:'navbatchilik',    // Firebase'dagi bo‘lim nomi (o‘zgartirmang)
+  FIREBASE:{
+    apiKey:"AIzaSyAIeG3dWQZskhb_DvpBsgPcEMGlsFV4YOs",
+    authDomain:"navbatchilik-b3930.firebaseapp.com",
+    projectId:"navbatchilik-b3930",
+    storageBucket:"navbatchilik-b3930.firebasestorage.app",
+    messagingSenderId:"495085383565",
+    appId:"1:495085383565:web:a65ca54199d89acf9117c4"
+  }
+};
+const tg=window.Telegram&&window.Telegram.WebApp;if(tg){try{tg.ready();tg.expand()}catch(e){}}
+const $=id=>document.getElementById(id);
+const tgUser=()=>{try{return tg.initDataUnsafe.user||null}catch(e){return null}};
+const WD=['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
+const todayS=()=>new Intl.DateTimeFormat('en-CA',{timeZone:CONFIG.TZ}).format(new Date());
+const addD=(d,n)=>{const x=new Date(d+'T00:00:00Z');x.setUTCDate(x.getUTCDate()+n);return x.toISOString().slice(0,10)};
+const wd=d=>WD[new Date(d+'T12:00:00Z').getUTCDay()];
+const isWork=d=>CONFIG.WORKDAYS.includes(new Date(d+'T12:00:00Z').getUTCDay());
+const prevWork=d=>{let x=addD(d,-1),n=0;while(!isWork(x)&&n++<7)x=addD(x,-1);return x};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const toast=t=>{const e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2200)};
+
+/* ---------- ma'lumot ---------- */
+let local={kids:[],days:{}};
+try{const j=JSON.parse(localStorage.getItem('nv_admin')||'null');if(j&&j.kids&&j.days)local=j}catch(e){}
+const saveLocal=()=>{try{localStorage.setItem('nv_admin',JSON.stringify(local))}catch(e){}};
+let D=local,mode='view',base={},info='',cur='today',tdSel=0;
+const nameMap=()=>{const m={};D.kids.forEach(k=>m[k.id]=k.name);return m};
+
+/* ---------- siqish (havola uchun) ---------- */
+const b64u=u=>{let s='';u.forEach(c=>s+=String.fromCharCode(c));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+const unb64u=s=>{s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+async function enc(o){const u=new TextEncoder().encode(JSON.stringify(o));
+ try{const st=new Blob([u]).stream().pipeThrough(new CompressionStream('deflate-raw'));return 'z'+b64u(new Uint8Array(await new Response(st).arrayBuffer()))}catch(e){return 'p'+b64u(u)}}
+async function dec(s){const u=unb64u(s.slice(1));let t;
+ if(s[0]==='z'){const st=new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate-raw'));t=new TextDecoder().decode(await new Response(st).arrayBuffer())}else t=new TextDecoder().decode(u);
+ return JSON.parse(t)}
+
+/* ---------- taqsimlash mantig'i ---------- */
+function app(m,day,d){for(const rm in day){
+ day[rm].r.forEach(i=>{const x=m[i];if(x){x.rc++;x.lr=d}});
+ day[rm].h.forEach(i=>{const x=m[i];if(x){x.hc++;x.lh=d}});
+ if(day[rm].h.length){const R=m.R=m.R||{},x=R[rm]=R[rm]||{c:0,l:''};x.c++;x.l=d}}}
+function hist(before){const m={};D.kids.forEach(k=>m[k.id]={rc:0,hc:0,lr:'',lh:''});
+ Object.keys(D.days).sort().forEach(d=>{if(d<before)app(m,D.days[d],d)});return m}
+// kecha shu turda bo‘lmaganlar → kam navbat → umumiy kami → eng eskisi → qo‘shilish tartibi
+function ch(pool,t,y,m){const c=t==='r'?'rc':'hc',l=t==='r'?'lr':'lh';
+ return [...pool].sort((a,b)=>{const A=m[a.id],B=m[b.id];
+  return (A[l]===y)-(B[l]===y)||A[c]-B[c]||(A.rc+A.hc)-(B.rc+B.hc)||A[l].localeCompare(B[l])||a.id-b.id}).slice(0,CONFIG.PER)}
+function genDay(d,m){
+ const act=D.kids.filter(k=>k.active!==false);
+ if(!act.length)throw new Error('Hali bolalar qo‘shilmagan (⚙️ Admin bo‘limi)');
+ const by={};act.forEach(k=>(by[k.room]=by[k.room]||[]).push(k));
+ const y=prevWork(d),day={},rooms=Object.keys(by).sort((a,b)=>a-b),need=CONFIG.PER*2;
+ rooms.forEach(rm=>{if(by[rm].length<CONFIG.PER)throw new Error(rm+'-xonada kamida '+CONFIG.PER+' ta bola kerak (hozir '+by[rm].length+')')});
+ // zalga navbatchi xona: kamida 4 ta bolasi bor xonalardan, eng uzoq vaqt zalga chiqmagani
+ const cand=rooms.filter(rm=>by[rm].length>=need);
+ if(!cand.length)throw new Error('Zal uchun kamida bitta xonada '+need+' ta bola kerak');
+ const R=m.R||{},lt=r=>(R[r]&&R[r].l)||'',cn=r=>(R[r]&&R[r].c)||0;
+ cand.sort((a,b)=>lt(a).localeCompare(lt(b))||cn(a)-cn(b)||a-b);
+ const hr=cand[0];
+ rooms.forEach(rm=>{const l=by[rm];
+  const r=ch(l,'r',y,m);
+  const h=rm===hr?ch(l.filter(k=>!r.includes(k)),'h',y,m):[];   // zal: faqat bitta xonadan; bir bola — bitta navbatchilik
+  day[rm]={r:r.map(k=>k.id),h:h.map(k=>k.id)}});
+ D.days[d]=day;app(m,day,d)}
+function ensureDay(d){
+ if(D.days[d])return '';
+ try{const ds=Object.keys(D.days).sort(),last=ds[ds.length-1];
+  if(last&&last>=d)return isWork(d)?'O‘tgan kun uchun ma‘lumot yo‘q':'';
+  let s=last?addD(last,1):(d>todayS()?todayS():d);if(s<addD(d,-60))s=d;
+  const m=hist(s);for(let x=s;x<=d;x=addD(x,1))if(isWork(x))genDay(x,m);
+  saveLocal();return ''}catch(e){return e.message}}
+function regenFuture(){const t=todayS();Object.keys(D.days).forEach(d=>{if(d>t)delete D.days[d]});saveLocal();return ensureDay(addD(t,CONFIG.AHEAD))}
+// to‘qnashuvlarni tekshirish (bir kunda 2 marta / ketma-ket bir xil tur)
+function conflicts(){const out=[],ds=Object.keys(D.days).sort();
+ ds.forEach((d,i)=>{const day=D.days[d],seen={};
+  for(const rm in day){[...day[rm].r,...day[rm].h].forEach(id=>{if(seen[id])out.push(d+': #'+id+' ikki marta');seen[id]=1});
+   if(i&&ds[i-1]===prevWork(d)){const p=D.days[ds[i-1]][rm];if(p){
+    day[rm].r.forEach(id=>p.r.includes(id)&&out.push(d+': #'+id+' ketma-ket xona'));
+    day[rm].h.forEach(id=>p.h.includes(id)&&out.push(d+': #'+id+' ketma-ket zal'))}}}});return out}
+
+/* ---------- Firebase ---------- */
+let fdb=null;
+try{firebase.initializeApp(CONFIG.FIREBASE);fdb=firebase.firestore()}catch(e){}
+const withTO=(p,ms)=>Promise.race([p,new Promise((_,j)=>setTimeout(()=>j(new Error('vaqt tugadi')),ms))]);
+async function pub(manual){
+ if(!fdb){if(manual)toast('❌ Firebase ulanmagan');return}
+ const p=payload();if(!p)return;
+ try{
+  const c=fdb.collection(CONFIG.COL);
+  await withTO(Promise.all([
+   c.doc('jadval').set({data:JSON.stringify(p),gen:p.gen,t:Date.now()}),
+   c.doc('zaxira').set({data:JSON.stringify(local),t:Date.now()})]),10000);
+  toast('☁️ Hammaga yuborildi')
+ }catch(e){toast('⚠️ Yuborilmadi: '+(e.code||e.message))}}
+
+/* ---------- yuklash ---------- */
+async function loadView(){let p=null;
+ const h=location.hash.match(/[#&]d=([^&]+)/);
+ if(h){try{p=await dec(h[1])}catch(e){}}
+ if(!p&&fdb){try{const s=await withTO(fdb.collection(CONFIG.COL).doc('jadval').get(),8000);if(s.exists)p=JSON.parse(s.data().data)}catch(e){}}
+ if(!p){try{const r=await fetch(CONFIG.DATA_URL+'?t='+Date.now(),{cache:'no-store'});if(r.ok)p=await r.json()}catch(e){}}
+ if(p&&p.days){try{localStorage.setItem('nv_view',JSON.stringify(p))}catch(e){}}
+ else{try{p=JSON.parse(localStorage.getItem('nv_view')||'null')}catch(e){}}
+ mode='view';
+ if(p&&p.days){D={kids:p.kids||[],days:p.days};base=p.base||{};info=p.gen||''}else{D=local;base={};info=''}}
+function setAdmin(){mode='admin';D=local;base={};info=''}
+async function boot(){const u=tgUser();let ok=false;try{ok=sessionStorage.getItem('nv_ok')==='1'}catch(e){}
+ if((u&&CONFIG.ADMIN_IDS.includes(u.id))||ok){setAdmin();
+  if(!local.kids.length&&fdb){try{const s=await withTO(fdb.collection(CONFIG.COL).doc('zaxira').get(),8000);
+   if(s.exists){const j=JSON.parse(s.data().data);if(j&&j.kids&&j.days){local=j;D=local;saveLocal()}}}catch(e){}}
+  if(local.v!==2){local.v=2;regenFuture()}
+  render();if(local.kids.length)await pub()}
+ else await loadView();
+ render()}
+
+/* ---------- ko‘rinish ---------- */
+const chips=(ids,t,nm)=>ids.map(id=>`<span class="nm ${t}">${esc(nm[id]||'?')}</span>`).join('');
+function dayHtml(d){
+ if(!isWork(d))return `<div class="card"><h2>🛌 Dam olish kuni</h2><p class="mut" style="margin:0">Bu kuni navbatchilik yo‘q.</p></div>`;
+ if(mode==='admin'){const e=ensureDay(d);if(e)return `<div class="card err">⚠️ ${esc(e)}</div>`}
+ const day=D.days[d];
+ if(!day)return `<div class="card"><p style="margin:0">Bu kun uchun ma‘lumot yo‘q. ${mode==='view'?'Admin jadvalni yangilashi kerak.':''}</p></div>`;
+ const nm=nameMap();
+ return Object.keys(day).sort((a,b)=>a-b).map(rm=>`<div class="card"><h2>${rm}-xona</h2><div class="lbl">🏠 Xona navbatchilari</div>${chips(day[rm].r,'r',nm)}${day[rm].h.length?`<div class="lbl">🏢 Zal navbatchilari</div>${chips(day[rm].h,'h',nm)}`:''}</div>`).join('')}
+function dayMsg(d,title){const day=D.days[d];if(!day)return '';const nm=nameMap();let o='📅 '+title+'\n';
+ Object.keys(day).sort((a,b)=>a-b).forEach(rm=>{
+  o+=`\n🏠 ${rm}-xona navbatchilari\n`+day[rm].r.map(i=>'• '+nm[i]).join('\n')+'\n';
+  if(day[rm].h.length)o+=`\n🏢 ${rm}-xona zal navbatchilari\n`+day[rm].h.map(i=>'• '+nm[i]).join('\n')+'\n'});return o.trim()}
+function renderToday(){const d=addD(todayS(),tdSel),u=tgUser();
+ $('hHi').textContent='Salom, '+((u&&u.first_name)||'do‘st')+'! 👋';
+ $('hDate').textContent=wd(d)+', '+d;
+ $('mdPill').textContent=mode==='admin'?'🔧 Admin rejimi':'👀 Ko‘rish'+(info?' • yangilandi '+info:'');
+ $('tb0').classList.toggle('on',!tdSel);$('tb1').classList.toggle('on',!!tdSel);
+ $('tdBody').innerHTML=dayHtml(d)}
+function setTd(n){tdSel=n;renderToday()}
+function copyDay(){const d=addD(todayS(),tdSel),t=dayMsg(d,tdSel?'Ertangi navbatchilar':'Bugungi navbatchilar');
+ if(!t){toast(isWork(d)?'Nusxalash uchun ma‘lumot yo‘q':'🛌 Dam olish kuni');return}copy(t)}
+async function copy(t){try{await navigator.clipboard.writeText(t);toast('📋 Nusxalandi')}catch(e){
+ const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();
+ try{document.execCommand('copy');toast('📋 Nusxalandi')}catch(_){prompt('Nusxalang:',t)}a.remove()}}
+function renderWeek(){const t=todayS(),nm=nameMap();let h='',err='';
+ for(let i=0;i<7;i++){const d=addD(t,i);if(!isWork(d))continue;
+  if(mode==='admin'){const e=ensureDay(d);if(e){err=e;break}}
+  const day=D.days[d];
+  h+=`<div class="card${d===t?' now':''}"><b>${wd(d)} • ${d.slice(5)}</b>${d===t?' <span class="pill">Bugun</span>':''}`+
+   (day?Object.keys(day).sort((a,b)=>a-b).map(rm=>`<div class="wr"><span class="rn">${rm}</span><div>🏠 ${day[rm].r.map(x=>esc(nm[x]||'?')).join(', ')}${day[rm].h.length?'<br>🏢 '+day[rm].h.map(x=>esc(nm[x]||'?')).join(', '):''}</div></div>`).join(''):'<p class="mut" style="margin:6px 0 0">Ma‘lumot yo‘q</p>')+'</div>'}
+ $('wkBody').innerHTML=(err?`<div class="card err">⚠️ ${esc(err)}</div>`:'')+h}
+function statsMap(upTo){const m={};D.kids.forEach(k=>{const b=base[k.id]||[0,0];m[k.id]={r:b[0],h:b[1]}});
+ Object.keys(D.days).forEach(d=>{if(d>upTo)return;const day=D.days[d];
+  for(const rm in day){day[rm].r.forEach(i=>m[i]&&m[i].r++);day[rm].h.forEach(i=>m[i]&&m[i].h++)}});return m}
+function renderStats(){if(mode==='admin')ensureDay(todayS());
+ const m=statsMap(todayS()),act=D.kids.filter(k=>k.active!==false);
+ if(!act.length){$('stBody').innerHTML='<div class="card"><p style="margin:0" class="mut">Hali ma‘lumot yo‘q.</p></div>';return}
+ const rooms=[...new Set(act.map(k=>k.room))].sort((a,b)=>a-b);
+ $('stBody').innerHTML=rooms.map(rm=>{const ks=act.filter(k=>k.room===rm);
+  const mx=Math.max(1,...ks.map(k=>Math.max(m[k.id].r,m[k.id].h))),tot=ks.map(k=>m[k.id].r+m[k.id].h),diff=Math.max(...tot)-Math.min(...tot);
+  return `<div class="card"><h2>${rm}-xona <span class="pill ${diff<=1?'ok':'bad'}">⚖️ farq: ${diff}</span></h2>`+
+   ks.map(k=>`<div class="sr"><b>${esc(k.name)}</b><div class="bars"><div class="bar r"><i style="width:${m[k.id].r/mx*100}%"></i></div><div class="bar h"><i style="width:${m[k.id].h/mx*100}%"></i></div></div><span>🏠${m[k.id].r} 🏢${m[k.id].h}</span></div>`).join('')+'</div>'}).join('')}
+
+/* ---------- admin ---------- */
+function renderAdmin(){const el=$('adBody');
+ if(mode!=='admin'){el.innerHTML=`<div class="card"><h2>🔒 Faqat admin uchun</h2><p class="mut" style="margin:0">Bolalar va jadvalni faqat admin o‘zgartira oladi.</p><input id="pin" type="password" inputmode="numeric" placeholder="Parol (PIN)"><button class="btn p" onclick="unlock()">🔓 Kirish</button></div>`;return}
+ const act=D.kids.filter(k=>k.active!==false),rooms=[...new Set(act.map(k=>k.room))].sort((a,b)=>a-b);
+ el.innerHTML=
+ `<div class="card"><h2>➕ Bola qo‘shish</h2><div class="two"><input id="kRoom" inputmode="numeric" placeholder="Xona" value="${rooms.length?rooms[rooms.length-1]:1}"><input id="kName" placeholder="Ism"></div><button class="btn" onclick="addKid()">➕ Qo‘shish</button></div>`+
+ (rooms.length?rooms.map(rm=>{const ks=act.filter(k=>k.room===rm),ok=ks.length>=CONFIG.PER*2;
+  return `<div class="card"><h2>${rm}-xona <span class="pill ${ok?'ok':'bad'}">${ok?'✅':'⚠️'} ${ks.length}/${CONFIG.PER*2}+</span></h2>`+ks.map(k=>`<div class="kr"><span>${esc(k.name)}</span><button onclick="delKid(${k.id})">✖</button></div>`).join('')+'</div>'}).join(''):'')+
+ `<div class="card"><h2>📤 Hammaga ko‘rsatish</h2><p class="mut" style="margin:0 0 4px;font-size:14px">Jadval o‘zgarganda o‘zi yuboriladi. Kerak bo‘lsa qo‘lda ham yuborishingiz mumkin.</p>
+  <button class="btn p" onclick="pub(true)">☁️ Hammaga yuborish (Firebase)</button>
+  <button class="btn o" onclick="shareData()">📋 data.json tayyorlash</button>
+  <button class="btn b" onclick="shareLink()">🔗 Havola tayyorlash</button>
+  <textarea id="out" rows="4" readonly placeholder="Natija shu yerda chiqadi"></textarea></div>`+
+ `<div class="card"><h2>🛠 Boshqaruv</h2>
+  <button class="btn p" onclick="doRegen()">🔄 Kelgusi jadvalni qayta yaratish</button>
+  <button class="btn" onclick="doCheck()">🔍 To‘qnashuvlarni tekshirish</button>
+  <button class="btn b" onclick="backup()">💾 Zaxira nusxa</button>
+  <textarea id="imp" rows="3" placeholder="Zaxira matnini shu yerga qo‘ying"></textarea>
+  <button class="btn o" onclick="doImport()">📥 Zaxiradan tiklash</button>
+  <button class="btn r" onclick="logout()">🔒 Chiqish</button></div>`}
+function unlock(){if($('pin').value===CONFIG.PIN){try{sessionStorage.setItem('nv_ok','1')}catch(e){}setAdmin();render();toast('🔓 Admin rejimi')}else toast('❌ Noto‘g‘ri parol')}
+async function logout(){try{sessionStorage.removeItem('nv_ok')}catch(e){}await loadView();render()}
+function addKid(){const room=parseInt($('kRoom').value),name=$('kName').value.trim();
+ if(!(room>0)||!name){toast('Xona raqami va ismni kiriting');return}
+ if(D.kids.some(k=>k.active!==false&&k.room===room&&k.name.toLowerCase()===name.toLowerCase())){toast('Bu bola allaqachon bor');return}
+ const id=Math.max(0,...D.kids.map(k=>k.id))+1;
+ D.kids.push({id,name,room,active:true});saveLocal();regenFuture();renderAdmin();toast('✅ '+name+' qo‘shildi');pub()}
+function delKid(id){const k=D.kids.find(x=>x.id===id);if(!k||!confirm(k.name+' o‘chirilsinmi? (statistika saqlanadi)'))return;
+ k.active=false;saveLocal();regenFuture();renderAdmin();pub()}
+function doRegen(){const e=regenFuture();toast(e?'⚠️ '+e:'✅ Jadval qayta yaratildi');if(!e)pub()}
+function doCheck(){ensureDay(addD(todayS(),CONFIG.AHEAD));const c=conflicts();toast(c.length?'⚠️ '+c.length+' ta to‘qnashuv: '+c[0]:'✅ To‘qnashuv yo‘q')}
+function backup(){$('out').value=JSON.stringify(local);$('out').select();copy($('out').value)}
+function doImport(){let p;try{p=JSON.parse($('imp').value)}catch(e){toast('❌ Matn noto‘g‘ri');return}
+ if(!p||!p.kids||!p.days||p.base){toast('❌ Bu zaxira nusxa emas');return}
+ if(!confirm('Hozirgi ma‘lumot almashtiriladi. Davom etasizmi?'))return;
+ local=p;D=local;saveLocal();render();toast('✅ Tiklandi');pub()}
+function payload(){const t=todayS(),e=ensureDay(addD(t,CONFIG.AHEAD));if(e){toast('⚠️ '+e);return null}
+ const ws=addD(t,-7),days={};Object.keys(D.days).forEach(d=>{if(d>=ws)days[d]=D.days[d]});
+ const m=hist(ws),b={};D.kids.forEach(k=>b[k.id]=[m[k.id].rc,m[k.id].hc]);
+ return {v:1,gen:t,kids:D.kids.map(k=>({id:k.id,name:k.name,room:k.room,active:k.active!==false})),days,base:b}}
+function shareData(){const p=payload();if(!p)return;$('out').value=JSON.stringify(p);$('out').select();copy($('out').value);toast('📋 data.json nusxalandi — GitHub’ga qo‘ying')}
+async function shareLink(){const p=payload();if(!p)return;const x=await enc(p);
+ $('out').value=location.href.split('#')[0]+'#d='+x;$('out').select();copy($('out').value)}
+
+/* ---------- umumiy ---------- */
+function render(){({today:renderToday,week:renderWeek,stats:renderStats,admin:renderAdmin})[cur]()}
+function go(id){cur=id;document.querySelectorAll('.sec').forEach(s=>s.classList.toggle('on',s.id===id));
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.s===id));render();window.scrollTo(0,0)}
+boot();
+</script></body></html>
